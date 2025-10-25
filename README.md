@@ -1,176 +1,180 @@
 # GPT Project: RAG & Fine-tuning
 
-Proyecto de experimentación con técnicas avanzadas de IA: **RAG (Retrieval-Augmented Generation)** y **Fine-tuning** usando modelos de lenguaje locales.
+[Español](README.es.md) | English
 
-## 🎯 Descripción
+Experimentation project with advanced AI techniques: **RAG (Retrieval-Augmented Generation)** and **Fine-tuning** using local language models.
 
-Este proyecto implementa dos enfoques complementarios para mejorar las capacidades de modelos de lenguaje:
+## 🎯 Description
 
-1. **Sistema RAG**: Permite que un LLM local responda preguntas basándose en documentos propios usando búsqueda vectorial
-2. **Fine-tuning con QLoRA**: Adapta un modelo pre-entrenado a tareas específicas usando cuantización de 4 bits
+This project implements two complementary approaches to enhance language model capabilities:
 
-## ✨ Características
+1. **RAG System**: Allows a local LLM to answer questions based on your own documents using vector search
+2. **Fine-tuning with QLoRA**: Adapts a pre-trained model to specific tasks using 4-bit quantization
 
-### Sistema RAG (`chatrag_py.py`)
-- 📚 Procesa documentos PDF y TXT
-- 🔍 Búsqueda semántica con FAISS
-- 🤖 Integración con Ollama para inferencia local
-- 💬 Interfaz interactiva de preguntas y respuestas
-- 📝 Muestra fuentes de información en cada respuesta
+## ✨ Features
+
+### RAG System (`chatrag_py.py`)
+- 📚 Processes PDF and TXT documents
+- 🔍 Semantic search with FAISS
+- 🤖 Integration with Ollama for local inference
+- 💬 Interactive Q&A interface
+- 📝 Shows information sources in each response
 
 ### Fine-tuning (`finetuning.py`)
-- ⚡ QLoRA (Quantized Low-Rank Adaptation) para entrenar con poca VRAM
-- 🎯 Cuantización de 4 bits
-- 💾 Guarda solo adaptadores (pesos ligeros)
-- 🔧 Configurable para GPU o CPU
+- ⚡ QLoRA (Quantized Low-Rank Adaptation) for training with low VRAM
+- 🎯 4-bit quantization
+- 💾 Saves only adapters (lightweight weights)
+- 🔧 Configurable for GPU or CPU
 
-## 📋 Requisitos
+## 📋 Requirements
 
 - Python 3.8+
-- [Ollama](https://ollama.ai/) instalado y corriendo
-- Modelo `gpt-oss:20b` descargado en Ollama
-- GPU con CUDA (opcional, pero recomendado para fine-tuning)
+- [Ollama](https://ollama.ai/) installed and running
+- `gpt-oss:20b` model downloaded in Ollama
+- GPU with CUDA (optional, but recommended for fine-tuning)
 
-## 🚀 Instalación
+## 🚀 Installation
 
-### 1. Clonar el repositorio
+### 1. Clone the repository
 ```bash
 git clone https://github.com/ricardohonores/gpt-project.git
 cd gpt-project
 ```
 
-### 2. Crear entorno virtual
+### 2. Create virtual environment
 ```bash
 python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-### 3. Instalar dependencias
+### 3. Install dependencies
 
-**Para el sistema RAG:**
+**For RAG system:**
 ```bash
 pip install langchain-community langchain-core transformers accelerate sentence-transformers faiss-cpu pypdf
 ```
 
-**Para fine-tuning (adicional):**
+**For fine-tuning (additional):**
 ```bash
 pip install datasets peft trl bitsandbytes
 ```
 
-**Para GPU (opcional):**
+**For GPU (optional):**
 ```bash
 pip install faiss-gpu
 ```
 
-### 4. Instalar y configurar Ollama
+### 4. Install and configure Ollama
 ```bash
-# Instalar Ollama (si no lo tienes)
+# Install Ollama (if you don't have it)
 curl -fsSL https://ollama.ai/install.sh | sh
 
-# Descargar el modelo
+# Download the model
 ollama pull gpt-oss:20b
 ```
 
-## 💻 Uso
+## 💻 Usage
 
-### Sistema RAG
+### RAG System
 
-1. **Coloca tus documentos** en la carpeta `mis_documentos/` (archivos .txt o .pdf)
+1. **Place your documents** in the `mis_documentos/` folder (.txt or .pdf files)
 
-2. **Inicia Ollama** (en otra terminal):
+2. **Start Ollama** (in another terminal):
 ```bash
 ollama serve
 ```
 
-3. **Ejecuta el sistema RAG**:
+3. **Run the RAG system**:
 ```bash
 python chatrag_py.py
 ```
 
-4. **Haz preguntas** interactivamente. Escribe `salir` para terminar.
+4. **Ask questions** interactively. Type `salir` to exit.
 
-**Ejemplo:**
+**Example:**
 ```
-Tu pregunta: ¿Qué es la IA generativa?
+Your question: What is generative AI?
 
---- Respuesta ---
-La IA generativa es una inteligencia artificial que crea contenido nuevo...
+--- Answer ---
+Generative AI is artificial intelligence that creates new content...
 
---- Fuentes ---
--> Fuente: /path/to/document.pdf, Pág: 5
+--- Sources ---
+-> Source: /path/to/document.pdf, Page: 5
 ```
 
 ### Fine-tuning
 
-1. **Prepara tu dataset** en formato JSONL (`dataset.jsonl`):
+1. **Prepare your dataset** in JSONL format (`dataset.jsonl`):
 ```json
-{"instruction": "Pregunta o tarea", "output": "Respuesta esperada"}
-{"instruction": "Otra pregunta", "output": "Otra respuesta"}
+{"instruction": "Question or task", "output": "Expected response"}
+{"instruction": "Another question", "output": "Another response"}
 ```
 
-2. **Ejecuta el entrenamiento**:
+2. **Run training**:
 ```bash
 python finetuning.py
 ```
 
-3. **Los adaptadores se guardan** en `./gpt_oss_fine_tuned/`
+3. **Adapters are saved** in `./gpt_oss_fine_tuned/`
 
-## 📁 Estructura del Proyecto
+## 📁 Project Structure
 
 ```
 gpt-project/
-├── chatrag_py.py          # Sistema RAG completo
-├── finetuning.py          # Script de fine-tuning con QLoRA
-├── dataset.jsonl          # Dataset de ejemplo
-├── CLAUDE.md              # Documentación técnica
-├── README.md              # Este archivo
-├── .gitignore             # Archivos ignorados por git
-└── mis_documentos/        # Carpeta de documentos para RAG
+├── chatrag_py.py          # Complete RAG system
+├── finetuning.py          # Fine-tuning script with QLoRA
+├── dataset.jsonl          # Sample dataset
+├── CLAUDE.md              # Technical documentation (English)
+├── CLAUDE.es.md           # Technical documentation (Spanish)
+├── README.md              # This file (English)
+├── README.es.md           # README in Spanish
+├── .gitignore             # Files ignored by git
+└── mis_documentos/        # Document folder for RAG
     ├── *.pdf
     └── *.txt
 ```
 
-## 🔧 Configuración
+## 🔧 Configuration
 
 ### RAG System
-Edita las siguientes variables en `chatrag_py.py`:
+Edit the following variables in `chatrag_py.py`:
 ```python
-DOCS_FOLDER = "/ruta/a/tus/documentos"
+DOCS_FOLDER = "/path/to/your/documents"
 EMBEDDINGS_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 OLLAMA_MODEL_NAME = "gpt-oss:20b"
 ```
 
 ### Fine-tuning
-Edita las siguientes variables en `finetuning.py`:
+Edit the following variables in `finetuning.py`:
 ```python
 OLLAMA_MODEL_NAME = "gpt-oss:20b"
 DATASET_FILE = "dataset.jsonl"
 OUTPUT_DIR = "./gpt_oss_fine_tuned"
 ```
 
-## 🤔 ¿RAG o Fine-tuning?
+## 🤔 RAG or Fine-tuning?
 
-| Característica | RAG | Fine-tuning |
-|----------------|-----|-------------|
-| **Modifica el modelo** | ❌ No | ✅ Sí |
-| **Requiere entrenamiento** | ❌ No | ✅ Sí |
-| **Documentos dinámicos** | ✅ Sí | ❌ No |
-| **Muestra fuentes** | ✅ Sí | ❌ No |
-| **Cambia comportamiento** | ❌ No | ✅ Sí |
-| **Uso de memoria** | 🟢 Bajo | 🟡 Medio |
+| Feature | RAG | Fine-tuning |
+|---------|-----|-------------|
+| **Modifies the model** | ❌ No | ✅ Yes |
+| **Requires training** | ❌ No | ✅ Yes |
+| **Dynamic documents** | ✅ Yes | ❌ No |
+| **Shows sources** | ✅ Yes | ❌ No |
+| **Changes behavior** | ❌ No | ✅ Yes |
+| **Memory usage** | 🟢 Low | 🟡 Medium |
 
-**Usa RAG cuando:** Necesites responder preguntas sobre documentos específicos o conocimiento que cambia frecuentemente.
+**Use RAG when:** You need to answer questions about specific documents or knowledge that changes frequently.
 
-**Usa Fine-tuning cuando:** Quieras que el modelo aprenda un estilo específico, dominio técnico o nuevos patrones de comportamiento.
+**Use Fine-tuning when:** You want the model to learn a specific style, technical domain, or new behavior patterns.
 
-## 📚 Documentación Adicional
+## 📚 Additional Documentation
 
-Para detalles técnicos sobre la arquitectura y configuración, consulta [CLAUDE.md](CLAUDE.md).
+For technical details about architecture and configuration, see [CLAUDE.md](CLAUDE.md).
 
-## 📄 Licencia
+## 📄 License
 
-Este proyecto es de código abierto y está disponible para uso educativo y experimental.
+This project is open source and available for educational and experimental use.
 
-## 🤝 Contribuciones
+## 🤝 Contributions
 
-Las contribuciones son bienvenidas. Siéntete libre de abrir issues o pull requests.
+Contributions are welcome. Feel free to open issues or pull requests.
